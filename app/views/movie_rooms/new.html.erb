@@ -1,0 +1,40 @@
+<h1>Create New Movie Room</h1>
+<div>
+  <%= form_with(url: new_movie_room_path, method: :get) do |f| %>
+    <%= f.label :query, "Search for a movie:" %>
+    <%= f.text_field :query %>
+    <%= f.submit "Search" %>
+  <% end %>
+</div>
+
+<% if @movie_data.present? %>
+  <div>
+    <p>Debug data: <%= @movie_data.inspect %></p>
+    
+    <h3><%= @movie_data["Title"] %> (<%= @movie_data["Year"] %>)</h3>
+    <%= image_tag @movie_data["Poster"] if @movie_data["Poster"] != "N/A" %>
+    <%= form_with(model: @movie_room) do |f| %>
+      <%= f.hidden_field :movie_title, value: @movie_data["Title"] %>
+      <%= f.hidden_field :movie_year, value: @movie_data["Year"] %>
+      <%= f.hidden_field :movie_poster_url, value: @movie_data["Poster"] %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_with(model: @movie_room) do |f| %>
+  
+  <div>
+    <%= f.label :title, "Room Title" %>
+    <%= f.text_field :title %>
+  </div>
+  <div>
+    <%= f.label :genre %>
+    <%= f.text_field :genre %>
+  </div>
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+  
+  <%= f.submit "Create Room" %>
+<% end %>

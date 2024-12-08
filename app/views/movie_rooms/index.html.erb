@@ -1,0 +1,11 @@
+<h1>Welcome to Movie Rooms</h1>
+<%= link_to "Create New Room", new_movie_room_path %>
+<% @movie_rooms.each do |room| %>
+  <div>
+    <h2><%= room.title %></h2>
+    <p>Movie: <%= room.movie_title %> (<%= movie_year %>)</p>
+    <p>Created by: <%= room.user.email %></p>
+    <p>Genre: <%= room.genre %></p>
+    <%= image_tag room.movie_poster_url if room.movie_poster_url.present? %>
+  </div>
+<% end %>
