@@ -1,4 +1,6 @@
 <h1>Create New Movie Room</h1>
+
+<!-- Movie search form -->
 <div>
   <%= form_with(url: new_movie_room_path, method: :get) do |f| %>
     <%= f.label :query, "Search for a movie:" %>
@@ -7,34 +9,48 @@
   <% end %>
 </div>
 
+<!-- Show selected movie if present -->
 <% if @movie_data.present? %>
   <div>
-    <p>Debug data: <%= @movie_data.inspect %></p>
-    
-    <h3><%= @movie_data["Title"] %> (<%= @movie_data["Year"] %>)</h3>
+    <h3>Selected Movie: <%= @movie_data["Title"] %> (<%= @movie_data["Year"] %>)</h3>
     <%= image_tag @movie_data["Poster"] if @movie_data["Poster"] != "N/A" %>
-    <%= form_with(model: @movie_room) do |f| %>
-      <%= f.hidden_field :movie_title, value: @movie_data["Title"] %>
-      <%= f.hidden_field :movie_year, value: @movie_data["Year"] %>
-      <%= f.hidden_field :movie_poster_url, value: @movie_data["Poster"] %>
-    <% end %>
   </div>
 <% end %>
 
+<!-- Room creation form -->
 <%= form_with(model: @movie_room) do |f| %>
-  
+  <% if @movie_data.present? %>
+    <%= f.hidden_field :movie_title, value: @movie_data["Title"] %>
+    <%= f.hidden_field :movie_year, value: @movie_data["Year"] %>
+    <%= f.hidden_field :movie_poster_url, value: @movie_data["Poster"] %>
+  <% end %>
+
   <div>
     <%= f.label :title, "Room Title" %>
     <%= f.text_field :title %>
   </div>
+
   <div>
     <%= f.label :genre %>
     <%= f.text_field :genre %>
   </div>
+
   <div>
     <%= f.label :description %>
     <%= f.text_area :description %>
   </div>
-  
+
   <%= f.submit "Create Room" %>
+<% end %>
+
+<!-- Add error messages display -->
+<% if @movie_room.errors.any? %>
+  <div>
+    <h2><%= pluralize(@movie_room.errors.count, "error") %> prohibited this room from being saved:</h2>
+    <ul>
+      <% @movie_room.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>

@@ -13,11 +13,11 @@ class MovieRoomsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
   def movie_room_params
     params.require(:movie_room).permit(:title, :genre, :description, :movie_title, :movie_year, :moviee_poster_url)
   end
-  def search
-  end
+
   def new
     @movie_room = MovieRoom.new
     if params[:query].present?
@@ -33,5 +33,20 @@ class MovieRoomsController < ApplicationController
 
   def show
     @movie_room = MovieRoom.find(params[:id])
+    @comments = @movie_room.comments
+    @comment = Comment.new
+  end
+
+  private
+
+  def movie_room_params
+    params.require(:movie_room).permit(
+      :title,
+      :genre,
+      :description,
+      :movie_title,
+      :movie_year,
+      :movie_poster_url
+    )
   end
 end
